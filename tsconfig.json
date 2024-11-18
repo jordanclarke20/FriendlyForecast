@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "lib": [
+            "ESNEXT",
+            "DOM"
+        ],
+        "allowJs": true,
+        "checkJs": true,
+        "moduleResolution": "node",
+        "alwaysStrict": true
+    },
+}
