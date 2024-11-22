@@ -69,9 +69,30 @@ if (!globalThis.fetch === undefined){
 
 async function  getWeatherForCity(city){
     const OPENWEATHER_API_KEY = process.env.WEATHER_API_KEY
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}`)
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric`)
     const json = await response.json()
     return json
+}
+
+
+/**
+ * 
+ * @param {Date | number | string} date 
+ * @param {Intl.DateTimeFormatOptions} [options]
+ * @returns {string}
+ */
+
+function formatDate(date, options){
+    date = new Date(date)
+    /**
+     * @type {Intl.DateTimeFormatOptions}
+     */
+    options ={
+        timeStyle: 'short',
+        ...options
+
+    }
+    return new Intl.DateTimeFormat('en-US', options).format(date)
 }
 
 const app = async (request, response) => {
@@ -86,16 +107,41 @@ const app = async (request, response) => {
         <title>Friendly Forecast</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text x='0' y='14'>🌈</text></svg>">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+        <link rel="stylesheet" href="style.css">
         </head>
         
         <body>
-            <h1>Hello World from ${city}</h1>
+            <h1>Hello from ${city}</h1>
             ${weather.cod !== 200 ? `<p>${weather.message}</p>` : 
-            `<pre>${JSON.stringify(weather, null, 2)}</pre>`}
-            
+            `<table>
+                <tr>
+                    <th></th>
+                    <th align="left">Temperature</th>
+                    <th align="left">Feels Like</th>
+                    <th align="left">Min</th>
+                    <th align="left">Max</th>
+                    <th align="left">Humidity</th>
+                    <th align="left">Wind Speed</th>
+                    <th align="left">Cloudiness</th>
+                    <th align="left">Sunrise</th>
+                    <th align="left">Sunset</th>
+                </tr>
+                <tr>
+                    <th><img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" alt="${weather.weather[0].description}"></th>
+                    <th align="left">${weather.main.temp} ℃</th>
+                    <th align="left">${weather.main.feels_like} ℃</th>
+                    <th align="left">${weather.main.temp_min} ℃</th>
+                    <th align="left">${weather.main.temp_max} ℃</th>
+                    <th align="left">${weather.main.humidity}</th>
+                    <th align="left">${weather.wind.speed}</th>
+                    <th align="left">${weather.clouds.all}</th>
+                    <th align="left">${formatDate(weather.sys.sunrise * 1000)}</th>
+                    <th align="left">${formatDate(weather.sys.sunset * 1000)}</th>
+                </tr>
+            </table>`}
+             
         </body>
-    </html>`)
+        </html>`)
 }
 
 http.createServer(app).listen(3000, () => {
