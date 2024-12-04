@@ -111,35 +111,53 @@ const app = async (request, response) => {
         </head>
         
         <body>
-            <h1>Hello from ${city}</h1>
-            ${weather.cod !== 200 ? `<p>${weather.message}</p>` : 
-            `<table>
-                <tr>
-                    <th></th>
-                    <th align="left">Temperature</th>
-                    <th align="left">Feels Like</th>
-                    <th align="left">Min</th>
-                    <th align="left">Max</th>
-                    <th align="left">Humidity</th>
-                    <th align="left">Wind Speed</th>
-                    <th align="left">Cloudiness</th>
-                    <th align="left">Sunrise</th>
-                    <th align="left">Sunset</th>
-                </tr>
-                <tr>
-                    <th><img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" alt="${weather.weather[0].description}"></th>
-                    <th align="left">${weather.main.temp} ℃</th>
-                    <th align="left">${weather.main.feels_like} ℃</th>
-                    <th align="left">${weather.main.temp_min} ℃</th>
-                    <th align="left">${weather.main.temp_max} ℃</th>
-                    <th align="left">${weather.main.humidity}</th>
-                    <th align="left">${weather.wind.speed}</th>
-                    <th align="left">${weather.clouds.all}</th>
-                    <th align="left">${formatDate(weather.sys.sunrise * 1000)}</th>
-                    <th align="left">${formatDate(weather.sys.sunset * 1000)}</th>
-                </tr>
-            </table>`}
-             
+            <main>
+                <h1>${city}</h1>
+                <h2>Current weather for ${city} on ${formatDate(weather.dt)}</h2>
+                ${weather.cod !== 200 ? `<p>${weather.message}</p>` : 
+                `
+                <p>
+                    <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" alt="${weather.weather[0].description}">
+                </p>
+                <table>
+                    <tr>
+                        <th align="left">Temperature</th>
+                        <td align="left">${weather.main.temp} ℃</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Feels Like</th>
+                        <td align="left">${weather.main.feels_like} ℃</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Min</th>    
+                        <td align="left">${weather.main.temp_min} ℃</td>            
+                    </tr>
+                    <tr>
+                        <th align="left">Max</th>
+                        <td align="left">${weather.main.temp_max} ℃</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Humidity</th>
+                        <td align="left">${weather.main.humidity}</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Wind Speed</th>
+                        <td align="left">${weather.wind.speed}</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Cloudiness</th>
+                        <td align="left">${weather.clouds.all}</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Sunrise</th>
+                        <td align="left">${formatDate(weather.sys.sunrise * 1000)}</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Sunset</th>
+                        <td align="left">${formatDate(weather.sys.sunset * 1000)}</td>
+                    </tr>
+                </table>`}
+            </main>     
         </body>
         </html>`)
 }
